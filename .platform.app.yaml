@@ -1,0 +1,87 @@
+# This file describes an application. You can have multiple applications
+# in the same project.
+
+# The name of this app. Must be unique within a project.
+name: demo
+
+# The type of the application to build.
+type: php:7.1
+
+# The relationships of the application with services or other applications.
+relationships:
+    database: "mysql:mysql"
+    applicationcache: "rediscache:redis"
+    #search: "elasticsearch:elasticsearch"
+
+#dependencies:
+
+runtime:
+    extensions:
+        - redis
+
+# The configuration of app when it is exposed to the web.
+web:
+    locations:
+        '/':
+            # The public directory of the app, relative to its root.
+            root: ''
+            # The front-controller script to send non-static requests to.
+            passthru: "/index.php"
+            scripts: true
+            rules:
+                # CSS and Javascript
+                '\.(css|js|hbs)$':
+                    allow: true
+                # image/* types.
+                '\.(gif|jpe?g|png|tiff?|wbmp|ico|jng|bmp|svgz?)$':
+                    allow: true
+                # audio/* types.
+                '\.(midi?|mpe?ga|mp2|mp3|m4a|ra|weba)$':
+                    allow: true
+                # video/* types.
+                '\.(3gpp?|mp4|mpe?g|mpe|ogv|mov|webm|flv|mng|asx|asf|wmv|avi)$':
+                    allow: true
+                # application/* types
+                '\.(ogx|swf|jar)$':
+                    allow: true
+                # fonts types.
+                '\.(ttf|eot|woff|woff2|otf)$':
+                    allow: true
+                # robots.txt.
+                '/robots\.txt$':
+                    allow: true
+
+# The size of the persistent disk of the application (in MB).
+disk: 256
+
+source:
+  operations:
+    logo_update:
+      command: |
+        cd images/logos/
+        rm 2.png
+        wget -O 2.png "https://platform.sh/logos/redesign/Platformsh_logo_black@2x.png"
+        git add 2.png
+        git commit -m "Update logo"
+    revert_commit:
+      command: |
+        git reset --hard HEAD~
+
+# The mounts that will be performed when the package is deployed.
+#mounts:
+#    "/storage": "shared:files/storage"
+# The hooks that will be performed when the package is deployed.
+#hooks:
+#    deploy: |
+#        php artisan migrate --force
+#    build: |
+#        cd webapp
+#        npm install
+#        bower install
+#        gulp
+# The configuration of scheduled execution.
+# see http://symfony.com/doc/current/components/console/introduction.html
+#crons:
+#    symfony:
+#        spec: "*/20 * * * *"
+#        cmd: "php cron.php example:test"
