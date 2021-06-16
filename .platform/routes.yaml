@@ -6,3 +6,10 @@
     type: redirect
     to: "https://{default}/"
 
+"https://static.{default}/"
+    type: upstream
+    upstream: "demo:php"
+    cache:
+        enabled: true
+        # Base the cache on the session cookie. Ignore all other cookies.
+        cookies: ['/^SS?ESS/']

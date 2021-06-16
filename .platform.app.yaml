@@ -5,7 +5,7 @@
 name: demo
 
 # The type of the application to build.
-type: php:7.1
+type: php:7.3
 
 # The relationships of the application with services or other applications.
 relationships:
@@ -13,7 +13,13 @@ relationships:
     applicationcache: "rediscache:redis"
     #search: "elasticsearch:elasticsearch"
 
+# Configuration of the build for this app
+#build:
+#    flavor: composer
+
 #dependencies:
+#    nodejs:
+#        yarn: "*"
 
 runtime:
     extensions:
@@ -35,6 +41,7 @@ web:
                 # image/* types.
                 '\.(gif|jpe?g|png|tiff?|wbmp|ico|jng|bmp|svgz?)$':
                     allow: true
+                    expires: 5m
                 # audio/* types.
                 '\.(midi?|mpe?ga|mp2|mp3|m4a|ra|weba)$':
                     allow: true
@@ -54,6 +61,7 @@ web:
 # The size of the persistent disk of the application (in MB).
 disk: 256
 
+# Automated operations (Source operations)
 source:
   operations:
     logo_update:
@@ -70,16 +78,26 @@ source:
 # The mounts that will be performed when the package is deployed.
 #mounts:
 #    "/storage": "shared:files/storage"
+
 # The hooks that will be performed when the package is deployed.
 #hooks:
-#    deploy: |
-#        php artisan migrate --force
 #    build: |
 #        cd webapp
-#        npm install
-#        bower install
-#        gulp
-# The configuration of scheduled execution.
+#        npm install # NPM
+#        bower install # Bower
+#        yarn install --production # Yarn
+#        php ./vendor/bin/ece-tools build:generate # Magento
+#        php ./vendor/bin/ece-tools build:transfer # Magento
+#    deploy: |
+#        php artisan migrate --force # Laravel
+#        php ./vendor/bin/ece-tools deploy # Magento
+#        drush -y cache-rebuild # Drupal
+#        drush -y updatedb # Drupal
+#    post_deploy: |
+#        php artisan migrate --force
+#        php ./vendor/bin/ece-tools post-deploy # Magento
+
+#The configuration of scheduled execution.
 # see http://symfony.com/doc/current/components/console/introduction.html
 #crons:
 #    symfony:
