@@ -9,7 +9,8 @@ type: php:7.3
 
 # The relationships of the application with services or other applications.
 relationships:
-    database: "db:mysql"
+    database: "db:admin"
+    reports: "db:viewer"
     applicationcache: "rediscache:redis"
     #search: "elasticsearch:elasticsearch"
 
