@@ -63,6 +63,7 @@ web:
 disk: 256
 
 # Automated operations (Source operations)
+# To call it: platform source-operation:run logo_update
 source:
   operations:
     logo_update:
